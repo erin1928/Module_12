@@ -32,3 +32,25 @@ cor(w, h, method = "pearson")
 cor(w, h, method = "spearman")
 cor(w, h, method = "kendall")
 ```
+
+```{r 5, include=TRUE}
+y <- h - mean(h)
+x <- w - mean(w)
+z <- data.frame(cbind(x, y))
+g <- ggplot(data = z, aes(x = x, y = y)) + geom_point()
+g
+slope.test <- function(beta1) {
+    g <- ggplot(data = z, aes(x = x, y = y))
+    g <- g + geom_point()
+    g <- g + geom_abline(intercept = 0, slope = beta1, size = 1, colour = "blue",
+        alpha = 1/2)
+    ols <- sum((y - beta1 * x)^2)
+    g <- g + ggtitle(paste("Slope = ", beta1, "\nSum of Squared Deviations = ",
+        round(ols, 3)))
+    g
+}
+```
+
+```{r 6, include=TRUE}
+manipulate(plot(1:5, cex = size), size = slider(0.5, 10, step = 0.5))  #priming the interface
+```
