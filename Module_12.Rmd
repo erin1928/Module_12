@@ -102,3 +102,36 @@ g <- g + geom_point()
 g <- g + geom_smooth(method = "lm", formula = y ~ x)
 g
 ```
+```{r 11, include=TRUE}
+library(lmodel2)  # load the lmodel2 package
+# Run the regression
+# model 2 regressions accept that both predictors and responses have error
+#this package allows us to run models one and two regressions
+mII <- lmodel2(height ~ weight, data = d, range.y = "relative", range.x = "relative",
+    nperm = 1000)
+mII
+```
+
+```{r 12, include = TRUE}
+plot(mII, "OLS")
+```
+```{r 13, include = TRUE}
+plot(mII, "RMA")
+```
+
+```{r 14, include = TRUE}
+plot(mII, "SMA")
+```
+
+```{r 15, include = TRUE}
+plot(mII, "MA")
+```
+
+```{r 16, include = TRUE}
+mI <- lm(height ~ weight, data = d)
+summary(mI)
+par(mfrow = c(1, 2))
+plot(mII, main = "lmodel2() OLS")
+plot(data = d, height ~ weight, main = "lm()")
+abline(mI)
+```
