@@ -51,6 +51,54 @@ slope.test <- function(beta1) {
 }
 ```
 
+
 ```{r 6, include=TRUE}
+y <- h - mean(h)
+x <- w - mean(w)
+z <- data.frame(cbind(x, y))
+g <- ggplot(data = z, aes(x = x, y = y)) + geom_point()
+g
+```
+
+```{r 7, include=TRUE}
+library(ggplot2)
 manipulate(plot(1:5, cex = size), size = slider(0.5, 10, step = 0.5))  #priming the interface
+manipulate(slope.test(beta1), beta1 = slider(-1, 1, initial = 0, step = 0.005))  #here we go!
+slope.test <- function(beta1) {
+    g <- ggplot(data = z, aes(x = x, y = y))
+    g <- g + geom_point()
+    g <- g + geom_abline(intercept = 0, slope = beta1, size = 1, colour = "blue",
+        alpha = 1/2)
+    ols <- sum((y - beta1 * x)^2)
+    g <- g + ggtitle(paste("Slope = ", beta1, "\nSum of Squared Deviations = ",
+        round(ols, 3)))
+    g
+}
+```
+
+```{r 8, include=TRUE}
+beta1 <- cor(w, h) * (sd(h)/sd(w))
+beta1
+beta1 <- cov(w, h)/var(w)
+beta1
+beta1 <- sum((h - mean(h)) * (w - mean(w)))/sum((w - mean(w))^2)
+beta1
+beta0 <- mean(h) - beta1 * mean(w)
+beta0
+```
+
+```{r 9, include=TRUE}
+m <- lm(height ~ weight, data = d)
+#left is response, right is predictor
+m
+#lm runs regressions
+names(m)
+m$coefficients
+head(m$model)
+```
+```{r 10, include=TRUE}
+g <- ggplot(data = d, aes(x = weight, y = height))
+g <- g + geom_point()
+g <- g + geom_smooth(method = "lm", formula = y ~ x)
+g
 ```
